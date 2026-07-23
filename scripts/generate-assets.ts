@@ -1,11 +1,11 @@
-import { copyFileSync, existsSync, mkdirSync } from 'fs';
-import { join } from 'path';
+import { copyFileSync, existsSync, mkdirSync } from "node:fs";
+import { join } from "node:path";
 
-const ASSETS_DIR = join(process.cwd(), 'src/assets');
-const PUBLIC_DIR = join(process.cwd(), 'public');
+const ASSETS_DIR = join(process.cwd(), "src/assets");
+const PUBLIC_DIR = join(process.cwd(), "public");
 
 function generateAssets() {
-  console.log('Generating assets from src/assets...');
+  console.log("Generating assets from src/assets...");
 
   // Ensure public directory exists
   if (!existsSync(PUBLIC_DIR)) {
@@ -13,10 +13,10 @@ function generateAssets() {
   }
 
   const assetMapping = [
-    { src: 'favicon.png', dest: 'favicon.ico' }, // using png as ico, browsers support it, or keep as icon.png
-    { src: 'favicon.png', dest: 'icon.png' },
-    { src: 'lama.png', dest: 'apple-icon.png' },
-    { src: 'og-image.png', dest: 'opengraph-image.png' }
+    { src: "favicon.png", dest: "favicon.ico" }, // using png as ico, browsers support it, or keep as icon.png
+    { src: "favicon.png", dest: "icon.png" },
+    { src: "lama.png", dest: "apple-icon.png" },
+    { src: "og-image.png", dest: "opengraph-image.png" },
   ];
 
   for (const asset of assetMapping) {
@@ -31,7 +31,7 @@ function generateAssets() {
     }
   }
 
-  console.log('Asset generation complete.');
+  console.log("Asset generation complete.");
 }
 
 generateAssets();

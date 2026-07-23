@@ -1,11 +1,11 @@
-import Header from "@/components/Header";
-import Hero from "@/components/Hero";
-import NewsCarousel from "@/components/NewsCarousel";
-import MdxSection from "@/components/MdxSection";
-import TemplatesSection from "@/components/TemplatesSection";
-import ServicesSection from "@/components/ServicesSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
+import Header from "@/components/Header";
+import Hero from "@/components/Hero";
+import MdxSection from "@/components/MdxSection";
+import NewsCarousel from "@/components/NewsCarousel";
+import ServicesSection from "@/components/ServicesSection";
+import TemplatesSection from "@/components/TemplatesSection";
 
 export default function Home() {
   return (

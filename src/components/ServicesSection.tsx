@@ -1,7 +1,15 @@
-import * as React from "react";
-import { Sparkles, Code, Workflow, Cloud, Smartphone, Search, ShieldCheck } from "lucide-react";
-import services from "@/content/services.json";
+import {
+  Cloud,
+  Code,
+  Search,
+  ShieldCheck,
+  Smartphone,
+  Sparkles,
+  Workflow,
+} from "lucide-react";
+import type * as React from "react";
 import { HeadingAnimation } from "@/components/common/heading-animation";
+import services from "@/content/services.json";
 
 // Map string icon names from JSON to Lucide components
 const IconMap: Record<string, React.ElementType> = {
@@ -22,7 +30,10 @@ export default function ServicesSection() {
           All Services
         </div>
         <h2 className="text-3xl md:text-5xl font-bold tracking-tight max-w-2xl">
-          <HeadingAnimation>Custom Solutions <br className="hidden md:inline" /> For Your Digital Growth</HeadingAnimation>
+          <HeadingAnimation>
+            Custom Solutions <br className="hidden md:inline" /> For Your
+            Digital Growth
+          </HeadingAnimation>
         </h2>
       </div>
 
@@ -38,7 +49,9 @@ export default function ServicesSection() {
               <div className="mb-6">
                 <Icon className="h-8 w-8 text-foreground" strokeWidth={1.5} />
               </div>
-              <h3 className="text-xl font-semibold mb-3 tracking-tight">{service.title}</h3>
+              <h3 className="text-xl font-semibold mb-3 tracking-tight">
+                {service.title}
+              </h3>
               <p className="text-muted-foreground text-sm leading-relaxed mb-8 flex-1">
                 {service.description}
               </p>

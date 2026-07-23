@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Outfit, Figtree } from "next/font/google";
+import { Figtree, Geist, Geist_Mono, Outfit } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 
-const figtreeHeading = Figtree({ subsets: ['latin'], variable: '--font-heading' });
+const figtreeHeading = Figtree({
+  subsets: ["latin"],
+  variable: "--font-heading",
+});
 
-const outfit = Outfit({ subsets: ['latin'], variable: '--font-sans' });
+const outfit = Outfit({ subsets: ["latin"], variable: "--font-sans" });
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -50,13 +53,8 @@ export const metadata: Metadata = {
     site: "@uygullama",
   },
   icons: {
-    icon: [
-      { url: '/favicon.ico' },
-      { url: '/icon.png', type: 'image/png' },
-    ],
-    apple: [
-      { url: '/apple-icon.png', type: 'image/png' },
-    ],
+    icon: [{ url: "/favicon.ico" }, { url: "/icon.png", type: "image/png" }],
+    apple: [{ url: "/apple-icon.png", type: "image/png" }],
   },
   robots: {
     index: true,
@@ -72,10 +70,18 @@ export default function RootLayout({
   return (
     <html
       lang={siteData.lang}
-      className={cn("h-full", "antialiased", "scroll-smooth", geistSans.variable, geistMono.variable, "font-sans", outfit.variable, figtreeHeading.variable)}
+      className={cn(
+        "h-full",
+        "antialiased",
+        "scroll-smooth",
+        geistSans.variable,
+        geistMono.variable,
+        "font-sans",
+        outfit.variable,
+        figtreeHeading.variable,
+      )}
     >
       <body className="min-h-full flex flex-col bg-zinc-50">
-
         <div className="relative min-h-screen text-foreground">
           <div className="pointer-events-none fixed inset-0 z-0">
             <div className="mx-auto h-full max-w-7xl border-x border-border/60" />
@@ -85,7 +91,6 @@ export default function RootLayout({
             {children}
           </div>
         </div>
-
       </body>
     </html>
   );

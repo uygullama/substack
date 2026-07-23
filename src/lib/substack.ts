@@ -29,7 +29,11 @@ export interface Section {
 }
 
 export interface SubStack {
-  getPosts(offset?: number, limit?: number, postTagId?: string): Promise<PostSummary[]>;
+  getPosts(
+    offset?: number,
+    limit?: number,
+    postTagId?: string,
+  ): Promise<PostSummary[]>;
   getPost(slug: string): Promise<Post | null>;
   getSections(): Promise<Section[]>;
   search(query: string): Promise<PostSummary[]>;
@@ -40,7 +44,11 @@ class SubstackAPI implements SubStack {
     return siteData.substackUrl;
   }
 
-  async getPosts(offset = 0, limit = 20, postTagId?: string): Promise<PostSummary[]> {
+  async getPosts(
+    offset = 0,
+    limit = 20,
+    postTagId?: string,
+  ): Promise<PostSummary[]> {
     try {
       const params = new URLSearchParams({
         sort: "new",
@@ -54,7 +62,7 @@ class SubstackAPI implements SubStack {
 
       const url = `${this.baseUrl}/api/v1/archive?${params.toString()}`;
       const res = await fetch(url, {
-        next: { revalidate: 3600, tags: ['substack-posts'] }
+        next: { revalidate: 3600, tags: ["substack-posts"] },
       });
 
       if (!res.ok) {
@@ -74,7 +82,7 @@ class SubstackAPI implements SubStack {
     try {
       const url = `${this.baseUrl}/api/v1/posts/${slug}`;
       const res = await fetch(url, {
-        next: { tags: ['substack-posts', 'substack'] }
+        next: { tags: ["substack-posts", "substack"] },
       });
 
       if (!res.ok) {
@@ -98,9 +106,9 @@ class SubstackAPI implements SubStack {
     try {
       const params = new URLSearchParams({ search: query });
       const url = `${this.baseUrl}/api/v1/archive?${params.toString()}`;
-      
+
       const res = await fetch(url, {
-        next: { revalidate: 3600, tags: ['substack-search', 'substack-posts'] }
+        next: { revalidate: 3600, tags: ["substack-search", "substack-posts"] },
       });
 
       if (!res.ok) {

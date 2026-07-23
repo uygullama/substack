@@ -1,12 +1,14 @@
-import { writeFileSync, mkdirSync, existsSync } from "fs";
-import { join } from "path";
+import { existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
 
 async function fetchTags() {
   const baseUrl = process.env.SUBSTACK_URL;
   const sid = process.env.SUBSTACK_SID;
 
   if (!baseUrl || !sid) {
-    console.error("Missing SUBSTACK_URL or SUBSTACK_SID in environment variables.");
+    console.error(
+      "Missing SUBSTACK_URL or SUBSTACK_SID in environment variables.",
+    );
     process.exit(1);
   }
 
@@ -24,23 +26,27 @@ async function fetchTags() {
     });
 
     if (!response.ok) {
-      console.error(`Failed to fetch tags: ${response.status} ${response.statusText}`);
+      console.error(
+        `Failed to fetch tags: ${response.status} ${response.statusText}`,
+      );
       const text = await response.text();
       console.error("Response body:", text);
       process.exit(1);
     }
 
     const data = await response.json();
-    
+
     // Ensure data directory exists
-    const dataDir = join(import.meta.dir, "../src/data");
+    const dataDir = join(process.cwd(), "src/data");
     if (!existsSync(dataDir)) {
       mkdirSync(dataDir, { recursive: true });
     }
 
     const outputPath = join(dataDir, "tags.json");
     writeFileSync(outputPath, JSON.stringify(data, null, 2), "utf-8");
-    console.log(`Successfully saved ${data.length || Object.keys(data).length} tags to src/data/tags.json`);
+    console.log(
+      `Successfully saved ${data.length || Object.keys(data).length} tags to src/data/tags.json`,
+    );
   } catch (error) {
     console.error("Error fetching tags:", error);
     process.exit(1);

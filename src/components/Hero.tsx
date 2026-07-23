@@ -1,7 +1,7 @@
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 import { HeadingAnimation } from "@/components/common/heading-animation";
+import { Button } from "@/components/ui/button";
 
 export default function Hero() {
   return (
@@ -13,18 +13,28 @@ export default function Hero() {
       </div>
 
       <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight max-w-3xl mb-6">
-        <HeadingAnimation>Technology Solutions <br className="hidden md:inline" /> Shaping the Future</HeadingAnimation>
+        <HeadingAnimation>
+          Technology Solutions <br className="hidden md:inline" /> Shaping the
+          Future
+        </HeadingAnimation>
       </h1>
 
       <p className="text-xl text-muted-foreground max-w-2xl mb-10">
-        We provide sustainable and innovative software solutions that improve your business processes. We follow and apply the developments in the technology world for you.
+        We provide sustainable and innovative software solutions that improve
+        your business processes. We follow and apply the developments in the
+        technology world for you.
       </p>
 
       <div className="flex flex-col sm:flex-row gap-4">
         <Button asChild size="lg" className="rounded-full px-8">
           <Link href="#contact">Get Directions</Link>
         </Button>
-        <Button variant="outline" size="lg" asChild className="rounded-full px-8">
+        <Button
+          variant="outline"
+          size="lg"
+          asChild
+          className="rounded-full px-8"
+        >
           <Link href="#about">About Us</Link>
         </Button>
       </div>
