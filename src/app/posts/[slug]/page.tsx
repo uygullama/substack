@@ -1,11 +1,19 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import Footer from "@/components/Footer";
-import Header from "@/components/Header";
-import SubstackContent from "@/components/SubstackContent";
+import Footer from "@/components/common/footer";
+import Header from "@/components/common/header";
+import SubstackContent from "@/components/common/substack-content";
 
 export const revalidate = 3600; // Hourly cache
 
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { substack } from "@/lib/substack";
 
 async function getPost(slug: string) {
@@ -27,8 +35,38 @@ export default async function HaberPage({
   return (
     <>
       <Header />
-      <main className="flex-1 max-w-4xl mx-auto w-full px-6 md:px-12 pt-32 pb-12">
-        <h1 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
+      <main className="flex-1 max-w-7xl mx-auto w-full px-6 md:px-16 pt-32 pb-16">
+        <Breadcrumb className="mb-8">
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/">Home</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            {post.postTags && post.postTags.length > 0 ? (
+              <>
+                <BreadcrumbItem>
+                  <BreadcrumbLink href={`/${post.postTags[0].slug}`}>
+                    {post.postTags[0].name}
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+              </>
+            ) : (
+              <>
+                <BreadcrumbItem>
+                  <BreadcrumbLink href="/posts">News</BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+              </>
+            )}
+            <BreadcrumbItem>
+              <BreadcrumbPage className="line-clamp-1">
+                {post.title}
+              </BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+        <h1 className="text-3xl md:text-4xl font-bold mb-6 tracking-tight">
           {post.title}
         </h1>
         {post.subtitle && (

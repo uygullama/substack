@@ -3,6 +3,7 @@
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import * as React from "react";
 import logo from "@/assets/logo.svg";
 import { Button } from "@/components/ui/button";
@@ -12,6 +13,17 @@ import { cn } from "@/lib/utils";
 export default function Header() {
   const [isOpen, setIsOpen] = React.useState(false);
   const [activeSection, setActiveSection] = React.useState("");
+  const pathname = usePathname();
+
+  const getHref = (href: string) => {
+    if (href.startsWith("tag:")) {
+      return `/${href.replace("tag:", "")}`;
+    }
+    if (href.startsWith("#") && pathname !== "/") {
+      return `/${href}`;
+    }
+    return href;
+  };
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -62,11 +74,7 @@ export default function Header() {
             {siteData.navigation.map((item) => (
               <Link
                 key={item.href}
-                href={
-                  item.href.startsWith("tag:")
-                    ? `/${item.href.replace("tag:", "")}`
-                    : item.href
-                }
+                href={getHref(item.href)}
                 className={cn(
                   "text-sm font-medium transition-colors hover:text-foreground relative",
                   activeSection === item.href
@@ -84,7 +92,9 @@ export default function Header() {
 
           <div className="hidden md:flex items-center">
             <Button asChild className="rounded-full px-6">
-              <Link href="#contact">Get directions</Link>
+              <Link href={pathname !== "/" ? "/#contact" : "#contact"}>
+                Get directions
+              </Link>
             </Button>
           </div>
 
@@ -121,7 +131,10 @@ export default function Header() {
               </Link>
               <div className="flex items-center gap-2">
                 <Button asChild className="rounded-full px-5 h-10">
-                  <Link href="#contact" onClick={() => setIsOpen(false)}>
+                  <Link
+                    href={pathname !== "/" ? "/#contact" : "#contact"}
+                    onClick={() => setIsOpen(false)}
+                  >
                     Get directions
                   </Link>
                 </Button>
@@ -141,11 +154,7 @@ export default function Header() {
               {siteData.navigation.map((item) => (
                 <Link
                   key={item.href}
-                  href={
-                    item.href.startsWith("tag:")
-                      ? `/${item.href.replace("tag:", "")}`
-                      : item.href
-                  }
+                  href={getHref(item.href)}
                   onClick={() => setIsOpen(false)}
                   className={cn(
                     "text-base font-medium py-2 border-b border-muted/50 last:border-0 transition-colors flex items-center justify-between",
@@ -168,7 +177,10 @@ export default function Header() {
                 asChild
                 className="w-full h-12 rounded-xl text-base bg-muted/50 hover:bg-muted"
               >
-                <Link href="#contact" onClick={() => setIsOpen(false)}>
+                <Link
+                  href={pathname !== "/" ? "/#contact" : "#contact"}
+                  onClick={() => setIsOpen(false)}
+                >
                   Contact Us
                 </Link>
               </Button>

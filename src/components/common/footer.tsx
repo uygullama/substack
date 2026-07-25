@@ -1,7 +1,7 @@
 import { Rss } from "lucide-react";
 import Image from "next/image";
 import logo from "@/assets/logo.svg";
-import DevelopedBy from "@/components/developed-by";
+import DevelopedBy from "@/components/common/developed-by";
 import siteData from "@/data/site.json";
 
 function TwitterIcon(props: React.SVGProps<SVGSVGElement>) {

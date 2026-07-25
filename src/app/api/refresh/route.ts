@@ -1,9 +1,8 @@
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
 export async function GET(_request: Request) {
   try {
-
     // Revalidate the ENTIRE site layout (all pages) just in case the slider is on the homepage
     revalidatePath("/", "layout");
 

@@ -1,11 +1,11 @@
-import ContactSection from "@/components/ContactSection";
-import Footer from "@/components/Footer";
-import Header from "@/components/Header";
-import Hero from "@/components/Hero";
-import MdxSection from "@/components/MdxSection";
-import NewsCarousel from "@/components/NewsCarousel";
-import ServicesSection from "@/components/ServicesSection";
-import TemplatesSection from "@/components/TemplatesSection";
+import Footer from "@/components/common/footer";
+import Header from "@/components/common/header";
+import ContactSection from "@/components/feature/contact-section";
+import DynamicSection from "@/components/feature/dynamic-section";
+import Hero from "@/components/feature/hero";
+import NewsCarousel from "@/components/feature/news-carousel";
+import ServicesSection from "@/components/feature/services-section";
+import TemplatesSection from "@/components/feature/templates-section";
 
 export default function Home() {
   return (
@@ -14,7 +14,12 @@ export default function Home() {
       <main className="flex-1">
         <Hero />
         <NewsCarousel />
-        <MdxSection id="about" filename="about.mdx" className="bg-muted/10" />
+        {/* <MdxSection id="about" filename="about.mdx" className="bg-muted/10" /> */}
+        <DynamicSection
+          id="about"
+          className="bg-muted/10"
+          imagePosition="left"
+        />
         <TemplatesSection />
         <ServicesSection />
         <ContactSection />

@@ -1,3 +1,5 @@
+import fs from "node:fs";
+import path from "node:path";
 import siteData from "@/data/site.json";
 
 export interface PostSummary {
@@ -13,6 +15,12 @@ export interface PostSummary {
   postTags?: { id: string; name: string; slug: string }[];
   wordcount: number;
   subtitle?: string;
+}
+
+export interface TagData {
+  id: string;
+  name: string;
+  slug: string;
 }
 
 export interface Post extends PostSummary {
@@ -37,6 +45,7 @@ export interface SubStack {
   getPost(slug: string): Promise<Post | null>;
   getSections(): Promise<Section[]>;
   search(query: string): Promise<PostSummary[]>;
+  getTagBySlug(slug: string): TagData | null;
 }
 
 class SubstackAPI implements SubStack {
@@ -122,6 +131,25 @@ class SubstackAPI implements SubStack {
       console.error(`Error searching for ${query}:`, error);
       return [];
     }
+  }
+
+  getTagBySlug(slug: string): TagData | null {
+    const tagsPath = path.join(process.cwd(), "src/data/tags.json");
+    let tags: TagData[] = [];
+    try {
+      if (fs.existsSync(tagsPath)) {
+        const fileContent = fs.readFileSync(tagsPath, "utf-8");
+        tags = JSON.parse(fileContent);
+      }
+    } catch (error) {
+      console.error("Error reading tags.json:", error);
+    }
+
+    const tagMap: Record<string, string> =
+      (siteData as { tagMap?: Record<string, string> }).tagMap || {};
+    const mappedSlug = tagMap[slug] || slug;
+
+    return tags.find((t) => t.slug === mappedSlug || t.slug === slug) || null;
   }
 }
 

@@ -1,6 +1,14 @@
-import Footer from "@/components/Footer";
-import Header from "@/components/Header";
-import PostList from "@/components/PostList";
+import Footer from "@/components/common/footer";
+import Header from "@/components/common/header";
+import PostList from "@/components/feature/post-list";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { getArchivePosts } from "./actions";
 
 export const revalidate = 3600; // Cache for 1 hour
@@ -12,7 +20,19 @@ export default async function PostsPage() {
     <>
       <Header />
 
-      <main className="flex-1 max-w-7xl mx-auto w-full px-6 md:px-12 pt-32 pb-16">
+      <main className="flex-1 max-w-7xl mx-auto w-full px-6 md:px-16 pt-32 pb-16">
+        <Breadcrumb className="mb-8 px-4">
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/">Home</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>News</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+
         <div className="mb-12 text-center md:text-left px-4">
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
             News & Announcements

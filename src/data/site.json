@@ -3,7 +3,7 @@
   "siteName": "YourSite",
   "description": "YourSite: Advanced Technology Solutions",
   "url": "https://example.com",
-  "substackUrl": "https://example.substack.com",
+  "substackUrl": "https://uygulama.substack.com",
   "googleMap": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3000.315053229648!2d26.583090076535565!3d41.663599571263434!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sExample!5e0!3m2!1sen!2sus!4v1717835848564!5m2!1sen!2sus",
   "socials": [
     {
@@ -49,5 +49,12 @@
       "label": "Contact",
       "href": "#contact"
     }
-  ]
+  ],
+  "tagMap": {
+    "news": "news",
+    "haberler": "news"
+  },
+  "pageMap": {
+    "about": "hakkmzda"
+  }
 }
