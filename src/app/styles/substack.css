@@ -1,0 +1,60 @@
+@layer components {
+  .substack-content .image-link-expand {
+    /* biome-ignore lint/complexity/noImportantStyles: Required to override Substack's inline styles */
+    display: none !important;
+  }
+
+  .substack-content a.image-link {
+    @apply cursor-zoom-in;
+  }
+
+  /* File Embed Styles */
+  .substack-content .file-embed-wrapper {
+    @apply mx-auto max-w-lg my-6 p-4 border border-slate-200 rounded-xl bg-white shadow-sm dark:bg-slate-900 dark:border-slate-800;
+  }
+
+  .substack-content .file-embed-container-reader {
+    @apply flex items-center justify-between flex-wrap gap-4;
+  }
+
+  .substack-content .file-embed-container-top {
+    @apply w-full flex items-center justify-between gap-4;
+  }
+
+  .substack-content img.file-embed-thumbnail-default,
+  .substack-content image.file-embed-thumbnail-default {
+    @apply w-12 h-12 rounded-lg !m-0 p-2.5 object-contain m-0 dark:border-slate-800 dark:invert;
+  }
+
+  .substack-content .file-embed-details {
+    @apply flex flex-col;
+  }
+
+  .substack-content .file-embed-details-h1 {
+    @apply font-bold text-slate-900 text-base leading-tight mb-1 dark:text-slate-50;
+  }
+
+  .substack-content .file-embed-details-h2 {
+    @apply text-sm text-slate-500 leading-none dark:text-slate-400;
+  }
+
+  .substack-content .file-embed-button.narrow {
+    /* biome-ignore lint/complexity/noImportantStyles: Required to override Substack's inline styles */
+    display: none !important;
+  }
+
+  .substack-content .file-embed-button.wide {
+    @apply bg-primary text-primary-foreground px-5 py-2 rounded-md font-semibold no-underline transition-colors inline-block text-sm;
+    /* biome-ignore lint/complexity/noImportantStyles: Required to override Substack's inline styles */
+    color: var(--primary-foreground) !important;
+    /* biome-ignore lint/complexity/noImportantStyles: Required to override Substack's inline styles */
+    text-decoration: none !important;
+    /* biome-ignore lint/complexity/noImportantStyles: Required to override Substack's inline styles */
+    background-color: var(--primary) !important;
+  }
+
+  .substack-content .file-embed-button.wide:hover {
+    /* biome-ignore lint/complexity/noImportantStyles: Required to override Substack's inline styles */
+    background-color: oklch(0.185 0 0) !important;
+  }
+}

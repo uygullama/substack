@@ -1,13 +1,14 @@
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+import site from "../src/data/site.json";
 
 async function fetchTags() {
-  const baseUrl = process.env.SUBSTACK_URL;
+  const baseUrl = site.substackUrl;
   const sid = process.env.SUBSTACK_SID;
 
   if (!baseUrl || !sid) {
     console.error(
-      "Missing SUBSTACK_URL or SUBSTACK_SID in environment variables.",
+      "Missing substackUrl in site.json or SUBSTACK_SID in environment variables.",
     );
     process.exit(1);
   }

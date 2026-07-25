@@ -14,8 +14,8 @@ function generateAssets() {
 
   const assetMapping = [
     { src: "favicon.png", dest: "favicon.ico" }, // using png as ico, browsers support it, or keep as icon.png
-    { src: "favicon.png", dest: "icon.png" },
-    { src: "lama.png", dest: "apple-icon.png" },
+    { src: "icon.png", dest: "icon.png" },
+    { src: "icon.png", dest: "apple-icon.png" },
     { src: "og-image.png", dest: "opengraph-image.png" },
   ];
 
