@@ -3,15 +3,21 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { getArchivePosts, type SubstackPost } from "@/app/posts/actions";
+import { getArchivePosts, type SubstackPost } from "@/app/actions";
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { localizedPath } from "@/lib/config/site.paths";
+import type { Locale } from "@/lib/config/site.types";
 
 export default function PostList({
   initialPosts,
   postTagId,
+  locale,
+  dict,
 }: {
   initialPosts: SubstackPost[];
   postTagId?: string;
+  locale: Locale;
+  dict: Record<string, string>;
 }) {
   const [posts, setPosts] = useState<SubstackPost[]>(initialPosts);
   const [loading, setLoading] = useState(false);
@@ -40,7 +46,7 @@ export default function PostList({
         {posts.map((item) => (
           <Link
             key={item.id}
-            href={`/posts/${item.slug}`}
+            href={localizedPath(locale, `/posts/${item.slug}`)}
             className="block h-full group"
           >
             <div className="border rounded-lg shadow-sm bg-background overflow-hidden h-full flex flex-col group-hover:border-primary/50 transition-colors">
@@ -55,13 +61,13 @@ export default function PostList({
                 </div>
               ) : (
                 <div className="w-full h-48 bg-muted flex items-center justify-center border-b">
-                  <span className="text-muted-foreground">No image</span>
+                  <span className="text-muted-foreground">{dict.noImage}</span>
                 </div>
               )}
               <CardHeader className="p-4 pb-2">
                 <div className="text-xs text-muted-foreground mb-2">
                   {item.post_date
-                    ? new Date(item.post_date).toLocaleDateString("en-US", {
+                    ? new Date(item.post_date).toLocaleDateString(locale, {
                         month: "short",
                         day: "numeric",
                         year: "numeric",
@@ -90,7 +96,7 @@ export default function PostList({
             disabled={loading}
             className="inline-flex h-11 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
           >
-            {loading ? "Loading..." : "Load More"}
+            {loading ? dict.loading : dict.loadMore}
           </button>
         </div>
       )}

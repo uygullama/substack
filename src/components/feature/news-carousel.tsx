@@ -8,9 +8,13 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { getDictionary } from "@/i18n/get-dictionary";
+import { localizedPath } from "@/lib/config/site.paths";
+import type { Locale } from "@/lib/config/site.types";
 import { substack } from "@/lib/substack";
 
-export default async function NewsCarousel() {
+export default async function NewsCarousel({ locale }: { locale: Locale }) {
+  const dict = await getDictionary(locale);
   try {
     const posts = await substack.getPosts(0, 10);
 
@@ -21,7 +25,7 @@ export default async function NewsCarousel() {
         subtitle: item.subtitle || item.description || "",
         imageUrl: item.cover_image,
         pubDate: item.post_date
-          ? new Date(item.post_date).toLocaleDateString("tr-TR", {
+          ? new Date(item.post_date).toLocaleDateString(locale, {
               month: "short",
               day: "numeric",
               year: "numeric",
@@ -40,17 +44,17 @@ export default async function NewsCarousel() {
           <div className="flex justify-between items-end mb-8 px-4 md:px-12">
             <div>
               <h2 className="text-2xl font-bold tracking-tight mb-2">
-                News & Announcements
+                {dict.newsCarousel.title}
               </h2>
               <p className="text-muted-foreground">
-                Stay up to date with our latest updates.
+                {dict.newsCarousel.description}
               </p>
             </div>
             <Link
-              href="/posts"
+              href={localizedPath(locale, "/posts")}
               className="hidden sm:inline-flex text-sm font-medium text-primary hover:underline"
             >
-              View all &rarr;
+              {dict.common.viewAll} &rarr;
             </Link>
           </div>
 
@@ -68,7 +72,10 @@ export default async function NewsCarousel() {
                     key={item.slug}
                     className="pl-4 md:basis-1/2 lg:basis-1/3"
                   >
-                    <Link href={`/posts/${item.slug}`} className="block h-full">
+                    <Link
+                      href={localizedPath(locale, `/posts/${item.slug}`)}
+                      className="block h-full"
+                    >
                       <div className="border rounded-lg shadow-sm bg-background overflow-hidden h-full flex flex-col hover:border-primary/50 transition-colors">
                         {item.imageUrl ? (
                           <div className="relative w-full h-48 bg-muted border-b">
@@ -82,7 +89,7 @@ export default async function NewsCarousel() {
                         ) : (
                           <div className="w-full h-48 bg-muted flex items-center justify-center border-b">
                             <span className="text-muted-foreground">
-                              No image
+                              {dict.common.noImage}
                             </span>
                           </div>
                         )}
@@ -115,7 +122,7 @@ export default async function NewsCarousel() {
     console.error("Error fetching RSS feed:", error);
     return (
       <div className="p-8 text-center border rounded-lg bg-muted/30 max-w-3xl mx-auto my-12 text-muted-foreground">
-        The news feed cannot be loaded at the moment.
+        {dict.newsCarousel.error}
       </div>
     );
   }

@@ -1,6 +1,10 @@
-import type { Metadata } from "next";
 import { Figtree, Geist, Geist_Mono, Outfit } from "next/font/google";
 import "./styles/globals.css";
+import Footer from "@/components/common/footer";
+import Header from "@/components/common/header";
+import { getDictionary } from "@/i18n/get-dictionary";
+import { getLocaleMeta } from "@/lib/config/site.resolver";
+import type { Locale } from "@/lib/config/site.types";
 import { cn } from "@/lib/utils";
 
 const figtreeHeading = Figtree({
@@ -20,56 +24,20 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-import siteData from "@/data/site.json";
-
-export const metadata: Metadata = {
-  title: {
-    default: siteData.siteName,
-    template: `%s | ${siteData.siteName}`,
-  },
-  description: siteData.description,
-  metadataBase: new URL(siteData.url),
-  openGraph: {
-    title: siteData.siteName,
-    description: siteData.description,
-    url: siteData.url,
-    siteName: siteData.siteName,
-    images: [
-      {
-        url: "/opengraph-image.png",
-        width: 1200,
-        height: 630,
-        alt: siteData.siteName,
-      },
-    ],
-    locale: "en_US",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: siteData.siteName,
-    description: siteData.description,
-    creator: "@uygullama",
-    site: "@uygullama",
-  },
-  icons: {
-    icon: [{ url: "/favicon.ico" }, { url: "/icon.png", type: "image/png" }],
-    apple: [{ url: "/apple-icon.png", type: "image/png" }],
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-};
-
-export default function RootLayout({
+export async function SiteDocument({
+  locale,
   children,
-}: Readonly<{
+}: {
+  locale: Locale;
   children: React.ReactNode;
-}>) {
+}) {
+  const meta = getLocaleMeta(locale);
+  const dict = await getDictionary(locale);
+
   return (
     <html
-      lang={siteData.lang}
+      lang={meta.htmlLang}
+      dir={meta.direction}
       className={cn(
         "h-full",
         "antialiased",
@@ -88,7 +56,9 @@ export default function RootLayout({
           </div>
 
           <div className="relative z-10 flex flex-col min-h-screen">
-            {children}
+            <Header locale={locale} dict={dict.nav} />
+            <main className="flex-1 w-full">{children}</main>
+            <Footer locale={locale} />
           </div>
         </div>
       </body>

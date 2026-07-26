@@ -2,35 +2,71 @@
 
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import * as React from "react";
 import { Button } from "@/components/ui/button";
-import siteData from "@/data/site.json";
+
+import { localizedPath } from "@/lib/config/site.paths";
+import {
+  getResolvedSiteConfig,
+  getSupportedLocales,
+} from "@/lib/config/site.resolver";
+import type { Locale } from "@/lib/config/site.types";
 import { cn } from "@/lib/utils";
 
-export default function Header() {
+export default function Header({
+  locale,
+  dict,
+}: {
+  locale: Locale;
+  dict: Record<string, string>;
+}) {
   const [isOpen, setIsOpen] = React.useState(false);
   const [activeSection, setActiveSection] = React.useState("");
+  const config = getResolvedSiteConfig(locale);
+  const router = useRouter();
   const pathname = usePathname();
+  const locales = getSupportedLocales();
 
-  const getHref = (href: string) => {
+  const handleLanguageChange = (newLocale: string) => {
+    if (newLocale === locale) return;
+
+    let basePath = pathname;
+    if (pathname.startsWith(`/${locale}/`)) {
+      basePath = pathname.substring(locale.length + 1);
+    } else if (pathname === `/${locale}`) {
+      basePath = "/";
+    }
+
+    const newPath = localizedPath(newLocale as Locale, basePath);
+    router.push(newPath);
+  };
+
+  // We convert object items to array for map
+  const navigationItems = Object.entries(
+    config.content.navigation?.items || {},
+  ).map(([id, item]) => ({ id, ...item }));
+
+  const getHref = (href: string | undefined) => {
+    if (!href) return localizedPath(locale, "/");
     if (href.startsWith("tag:")) {
-      return `/${href.replace("tag:", "")}`;
+      return localizedPath(locale, `/${href.replace("tag:", "")}`);
     }
-    if (href.startsWith("#") && pathname !== "/") {
-      return `/${href}`;
+    if (href.startsWith("#")) {
+      return localizedPath(locale, `/${href}`);
     }
-    return href;
+    return localizedPath(locale, href);
   };
 
   React.useEffect(() => {
     const handleScroll = () => {
-      const sectionIds = siteData.navigation
-        .filter((item) => item.href.startsWith("#"))
-        .map((item) => item.href.replace("#", ""));
+      const sectionIds = navigationItems
+        .filter((item) => item.href?.startsWith("#"))
+        .map((item) => item.href?.replace("#", "") || "");
       let current = "";
 
       for (const id of sectionIds) {
+        if (!id) continue;
         const element = document.getElementById(id);
         if (element) {
           const rect = element.getBoundingClientRect();
@@ -44,70 +80,86 @@ export default function Header() {
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    // Use a short timeout to ensure elements are fully rendered before initial check
     const timeout = setTimeout(handleScroll, 100);
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
       clearTimeout(timeout);
     };
-  }, []);
+  }, [navigationItems]);
 
   return (
     <>
-      {/* Fixed horizontal line */}
       <div className="fixed top-14 left-0 w-full h-[1px] bg-border/60 z-40" />
-      {/* Fading blur and background effect below the line */}
-      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-7xl  h-14 z-30 pointer-events-none backdrop-blur-md" />
-      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-7xl  border-l border-r h-14 z-30 pointer-events-none bg-gradient-to-b from-background/90 to-transparent" />
+      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-7xl h-14 z-30 pointer-events-none backdrop-blur-md" />
+      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-7xl border-l border-r h-14 z-30 pointer-events-none bg-gradient-to-b from-background/90 to-transparent" />
 
       <header className="fixed top-6 left-1/2 z-50 w-[calc(100%-2rem)] max-w-6xl -translate-x-1/2 rounded-xl border bg-background/80 backdrop-blur-md px-4 py-3 shadow-sm transition-all">
         <div className="flex items-center justify-between">
-          <Link href="/" className="flex items-center space-x-2">
+          <Link
+            href={localizedPath(locale, "/")}
+            className="flex items-center space-x-2"
+          >
             {/* biome-ignore lint/performance/noImgElement: SVG optimization not needed */}
             <img
               src="/logo.svg"
-              alt={siteData.siteName}
+              alt={config.content.siteName}
               className="h-10 w-auto"
             />
             {/* biome-ignore lint/performance/noImgElement: SVG optimization not needed */}
             <img
               src="/logotype.svg"
-              alt={siteData.siteName}
+              alt={config.content.siteName}
               className="h-8 w-auto"
             />
           </Link>
 
-          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
-            {siteData.navigation.map((item) => (
-              <Link
-                key={item.href}
-                href={getHref(item.href)}
-                className={cn(
-                  "text-sm font-medium transition-colors hover:text-foreground relative",
-                  activeSection === item.href
-                    ? "text-foreground font-semibold"
-                    : "text-foreground/60",
-                )}
-              >
-                {item.label}
-                {activeSection === item.href && (
-                  <span className="absolute -bottom-[22px] left-0 w-full h-[2px] bg-primary rounded-t-full" />
-                )}
-              </Link>
-            ))}
+            {navigationItems.map((item) => {
+              const href = getHref(item.href);
+              return (
+                <Link
+                  key={item.id}
+                  href={href}
+                  className={cn(
+                    "text-sm font-medium transition-colors hover:text-foreground relative",
+                    activeSection === item.href
+                      ? "text-foreground font-semibold"
+                      : "text-foreground/60",
+                  )}
+                >
+                  {item.label}
+                  {activeSection === item.href && (
+                    <span className="absolute -bottom-[22px] left-0 w-full h-[2px] bg-primary rounded-t-full" />
+                  )}
+                </Link>
+              );
+            })}
           </nav>
 
-          <div className="hidden md:flex items-center">
+          <div className="hidden md:flex items-center gap-4">
+            <div className="flex items-center gap-1 bg-muted/30 rounded-full p-1 border border-muted-foreground/20 backdrop-blur-sm">
+              {locales.map((loc) => (
+                <button
+                  key={loc}
+                  onClick={() => handleLanguageChange(loc)}
+                  type="button"
+                  className={cn(
+                    "px-3 py-1.5 text-xs font-semibold rounded-full transition-all uppercase",
+                    locale === loc
+                      ? "bg-background text-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground",
+                  )}
+                >
+                  {loc}
+                </button>
+              ))}
+            </div>
             <Button asChild className="rounded-full px-6">
-              <Link href={pathname !== "/" ? "/#contact" : "#contact"}>
-                Get directions
-              </Link>
+              <Link href={getHref("#contact")}>{dict.getDirections}</Link>
             </Button>
           </div>
 
-          {/* Mobile Menu Toggle */}
           <div className="flex items-center md:hidden">
             <Button
               variant="ghost"
@@ -116,36 +168,35 @@ export default function Header() {
               className="h-8 w-8 rounded-md"
             >
               <Menu className="h-5 w-5" />
-              <span className="sr-only">Open menu</span>
+              <span className="sr-only">{dict.openMenu}</span>
             </Button>
           </div>
         </div>
       </header>
 
-      {/* Mobile Menu Overlay */}
       {isOpen && (
         <div className="fixed inset-0 z-50 bg-black/20 backdrop-blur-sm md:hidden">
           <div className="fixed left-4 right-4 top-4 rounded-2xl border bg-background p-4 shadow-lg">
             <div className="mb-6 flex items-center justify-between">
               <Link
-                href="/"
+                href={localizedPath(locale, "/")}
                 className="flex items-center"
                 onClick={() => setIsOpen(false)}
               >
                 {/* biome-ignore lint/performance/noImgElement: SVG optimization not needed */}
                 <img
                   src="/logo.svg"
-                  alt={siteData.siteName}
+                  alt={config.content.siteName}
                   className="h-8 w-auto"
                 />
               </Link>
               <div className="flex items-center gap-2">
                 <Button asChild className="rounded-full px-5 h-10">
                   <Link
-                    href={pathname !== "/" ? "/#contact" : "#contact"}
+                    href={getHref("#contact")}
                     onClick={() => setIsOpen(false)}
                   >
-                    Get directions
+                    {dict.getDirections}
                   </Link>
                 </Button>
                 <Button
@@ -155,15 +206,15 @@ export default function Header() {
                   className="h-10 w-10 rounded-md border-muted-foreground/20"
                 >
                   <X className="h-5 w-5" />
-                  <span className="sr-only">Close menu</span>
+                  <span className="sr-only">{dict.closeMenu}</span>
                 </Button>
               </div>
             </div>
 
             <nav className="flex flex-col gap-4">
-              {siteData.navigation.map((item) => (
+              {navigationItems.map((item) => (
                 <Link
-                  key={item.href}
+                  key={item.id}
                   href={getHref(item.href)}
                   onClick={() => setIsOpen(false)}
                   className={cn(
@@ -179,6 +230,32 @@ export default function Header() {
                   )}
                 </Link>
               ))}
+
+              <div className="py-2 border-b border-muted/50 last:border-0 flex items-center justify-between">
+                <span className="text-base font-medium text-foreground/80">
+                  {dict.changeLanguage || "Language"}
+                </span>
+                <div className="flex items-center gap-1 bg-muted/50 rounded-full p-1 border border-muted-foreground/20">
+                  {locales.map((loc) => (
+                    <button
+                      key={loc}
+                      onClick={() => {
+                        handleLanguageChange(loc);
+                        setIsOpen(false);
+                      }}
+                      type="button"
+                      className={cn(
+                        "px-3 py-1.5 text-xs font-semibold rounded-full transition-all uppercase",
+                        locale === loc
+                          ? "bg-background text-foreground shadow-sm"
+                          : "text-muted-foreground hover:text-foreground",
+                      )}
+                    >
+                      {loc}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </nav>
 
             <div className="mt-6">
@@ -188,10 +265,10 @@ export default function Header() {
                 className="w-full h-12 rounded-xl text-base bg-muted/50 hover:bg-muted"
               >
                 <Link
-                  href={pathname !== "/" ? "/#contact" : "#contact"}
+                  href={getHref("#contact")}
                   onClick={() => setIsOpen(false)}
                 >
-                  Contact Us
+                  {dict.contactUs}
                 </Link>
               </Button>
             </div>

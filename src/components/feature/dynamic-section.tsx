@@ -1,22 +1,25 @@
 import Image from "next/image";
 import SubstackContent from "@/components/common/substack-content";
-import siteData from "@/data/site.json";
+import { getResolvedSiteConfig } from "@/lib/config/site.resolver";
+import type { Locale } from "@/lib/config/site.types";
 import { substack } from "@/lib/substack";
 
 interface DynamicSectionProps {
   id: string;
   className?: string;
   imagePosition?: "left" | "right" | "top";
+  locale?: Locale;
 }
 
 export default async function DynamicSection({
   id,
   className = "",
   imagePosition = "top",
+  locale,
 }: DynamicSectionProps) {
-  const pageMap: Record<string, string> =
-    (siteData as { pageMap?: Record<string, string> }).pageMap || {};
-  const slug = pageMap[id];
+  if (!locale) return null;
+  const config = getResolvedSiteConfig(locale);
+  const slug = config.source.substack?.pages?.[id];
 
   if (!slug) {
     return null;

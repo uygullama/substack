@@ -50,7 +50,7 @@ export interface SubStack {
 
 class SubstackAPI implements SubStack {
   private get baseUrl() {
-    return siteData.substackUrl;
+    return siteData.shared.substack;
   }
 
   async getPosts(

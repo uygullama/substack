@@ -1,6 +1,8 @@
 import { Rss } from "lucide-react";
 import DevelopedBy from "@/components/common/developed-by";
-import siteData from "@/data/site.json";
+import { getDictionary } from "@/i18n/get-dictionary";
+import { getResolvedSiteConfig } from "@/lib/config/site.resolver";
+import type { Locale } from "@/lib/config/site.types";
 
 function TwitterIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -104,10 +106,14 @@ function getSocialIcon(platform: string) {
   }
 }
 
-export default function Footer() {
+export default async function Footer({ locale }: { locale: Locale }) {
   const currentYear = new Date().getFullYear();
+  const config = getResolvedSiteConfig(locale);
+  const dict = await getDictionary(locale);
 
-  const socials = siteData.socials.filter((s: { url: string }) => s.url);
+  const socials = Object.entries(config.socials || {})
+    .filter(([_, url]) => Boolean(url))
+    .map(([platform, url]) => ({ platform, url: url as string }));
 
   return (
     <footer className="border-t bg-background overflow-hidden relative pt-12 md:pt-16 pb-0 shadow-inner">
@@ -115,7 +121,8 @@ export default function Footer() {
         <div className="w-full flex flex-col md:flex-row justify-between items-center gap-6 md:gap-4 relative">
           <div className="flex justify-center md:flex-1 md:justify-start">
             <p className="text-sm text-muted-foreground font-medium text-center md:text-left">
-              &copy; {currentYear} {siteData.siteName}. All rights reserved.
+              &copy; {currentYear} {config.content.siteName}.{" "}
+              {dict.footer.allRightsReserved}
             </p>
           </div>
 
@@ -143,7 +150,7 @@ export default function Footer() {
           {/* biome-ignore lint/performance/noImgElement: SVG optimization not needed */}
           <img
             src="/logotype.svg"
-            alt={siteData.siteName}
+            alt={config.content.siteName}
             className="w-full h-auto object-contain"
           />
 
@@ -151,7 +158,7 @@ export default function Footer() {
           {/* biome-ignore lint/performance/noImgElement: SVG optimization not needed */}
           <img
             src="/logotype.svg"
-            alt={`${siteData.siteName} reflection`}
+            alt={`${config.content.siteName} reflection`}
             className="w-full h-auto object-contain opacity-50"
             style={{
               transform: "scaleY(-1)",
@@ -164,7 +171,7 @@ export default function Footer() {
         </div>
 
         <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-20 w-full flex justify-center">
-          <DevelopedBy />
+          <DevelopedBy dict={dict.footer} />
         </div>
       </div>
     </footer>

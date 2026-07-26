@@ -3,12 +3,12 @@ import { join } from "node:path";
 import site from "../src/data/site.json";
 
 async function fetchTags() {
-  const baseUrl = site.substackUrl;
+  const baseUrl = site.shared.substack;
   const sid = process.env.SUBSTACK_SID;
 
   if (!baseUrl || !sid) {
     console.error(
-      "Missing substackUrl in site.json or SUBSTACK_SID in environment variables.",
+      "Missing substack in site.json or SUBSTACK_SID in environment variables.",
     );
     process.exit(1);
   }
@@ -43,10 +43,17 @@ async function fetchTags() {
       mkdirSync(dataDir, { recursive: true });
     }
 
-    const outputPath = join(dataDir, "tags.json");
-    writeFileSync(outputPath, JSON.stringify(data, null, 2), "utf-8");
+    const outputPath = join(dataDir, "substack-tags.json");
+
+    const manifest = {
+      generatedAt: new Date().toISOString(),
+      publicationUrl: baseUrl,
+      tags: data,
+    };
+
+    writeFileSync(outputPath, JSON.stringify(manifest, null, 2), "utf-8");
     console.log(
-      `Successfully saved ${data.length || Object.keys(data).length} tags to src/data/tags.json`,
+      `Successfully saved manifest with ${data.length || Object.keys(data).length} tags to src/data/substack-tags.json`,
     );
   } catch (error) {
     console.error("Error fetching tags:", error);

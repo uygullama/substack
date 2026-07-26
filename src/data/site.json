@@ -1,60 +1,156 @@
 {
-  "lang": "en",
-  "siteName": "YourSite",
-  "description": "YourSite: Advanced Technology Solutions",
-  "url": "https://example.com",
-  "substackUrl": "https://uygulama.substack.com",
-  "googleMap": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3000.315053229648!2d26.583090076535565!3d41.663599571263434!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sExample!5e0!3m2!1sen!2sus!4v1717835848564!5m2!1sen!2sus",
-  "socials": [
-    {
-      "platform": "Twitter",
-      "url": "https://twitter.com/example"
-    },
-    {
-      "platform": "LinkedIn",
-      "url": "https://linkedin.com/company/example"
-    },
-    {
-      "platform": "Instagram",
-      "url": "https://instagram.com/example"
-    },
-    {
-      "platform": "GitHub",
-      "url": "https://github.com/example"
-    },
-    {
-      "platform": "Substack",
-      "url": "https://example.substack.com"
+  "$schema": "../lib/config/site.schema.ts",
+  "schemaVersion": 2,
+  "i18n": {
+    "defaultLocale": "tr",
+    "locales": {
+      "tr": {
+        "enabled": true,
+        "label": "Türkçe",
+        "htmlLang": "tr",
+        "intlLocale": "tr-TR",
+        "openGraphLocale": "tr_TR",
+        "direction": "ltr"
+      },
+      "en": {
+        "enabled": true,
+        "label": "English",
+        "htmlLang": "en",
+        "intlLocale": "en-US",
+        "openGraphLocale": "en_US",
+        "direction": "ltr"
+      },
+      "de": {
+        "enabled": true,
+        "label": "Deutsch",
+        "htmlLang": "de",
+        "intlLocale": "de-DE",
+        "openGraphLocale": "de_DE",
+        "direction": "ltr"
+      }
     }
-  ],
-  "contact": {
-    "address": "123 Main Street, Suite 400, New York, NY 10001",
-    "email": "info@example.com",
-    "phone": "+1 (555) 123-4567"
   },
-  "navigation": [
-    {
-      "label": "News",
-      "href": "tag:news"
+  "shared": {
+    "url": "https://example.com",
+    "substack": "https://uygulama.substack.com",
+    "socials": {
+      "twitter": "https://twitter.com/example",
+      "linkedin": "https://linkedin.com/company/example",
+      "instagram": "https://instagram.com/example",
+      "github": "https://github.com/example",
+      "substack": "https://example.substack.com"
     },
-    {
-      "label": "About",
-      "href": "#about"
-    },
-    {
-      "label": "Services",
-      "href": "#services"
-    },
-    {
-      "label": "Contact",
-      "href": "#contact"
+    "contact": {
+      "address": "123 Main Street, Suite 400, New York, NY 10001",
+      "email": "info@example.com",
+      "phone": "+1 (555) 123-4567",
+      "mapEmbedUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3000.315053229648!2d26.583090076535565!3d41.663599571263434!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sExample!5e0!3m2!1sen!2sus!4v1717835848564!5m2!1sen!2sus"
     }
-  ],
-  "tagMap": {
-    "news": "news",
-    "haberler": "news"
   },
-  "pageMap": {
-    "about": "hakkmzda"
+  "sources": {
+    "tr": {
+      "substack": {
+        "pages": {
+          "about": "hakkmzda"
+        },
+        "tags": {
+          "news": "haberler"
+        }
+      }
+    },
+    "en": {
+      "substack": {
+        "pages": {
+          "about": "about-us"
+        },
+        "tags": {
+          "news": "news"
+        }
+      }
+    },
+    "de": {
+      "substack": {
+        "pages": {
+          "about": "ueber-uns"
+        },
+        "tags": {
+          "news": "nachrichten"
+        }
+      }
+    }
+  },
+  "content": {
+    "tr": {
+      "siteName": "YourSite",
+      "description": "YourSite: Gelişmiş Teknoloji Çözümleri",
+      "navigation": {
+        "items": {
+          "news": {
+            "label": "Haberler",
+            "href": "tag:haberler"
+          },
+          "about": {
+            "label": "Hakkında",
+            "href": "#about"
+          },
+          "services": {
+            "label": "Hizmetler",
+            "href": "#services"
+          },
+          "contact": {
+            "label": "İletişim",
+            "href": "#contact"
+          }
+        }
+      }
+    },
+    "en": {
+      "siteName": "YourSite",
+      "description": "YourSite: Advanced Technology Solutions",
+      "navigation": {
+        "items": {
+          "news": {
+            "label": "News",
+            "href": "tag:news"
+          },
+          "about": {
+            "label": "About",
+            "href": "#about"
+          },
+          "services": {
+            "label": "Services",
+            "href": "#services"
+          },
+          "contact": {
+            "label": "Contact",
+            "href": "#contact"
+          }
+        }
+      }
+    },
+    "de": {
+      "siteName": "YourSite",
+      "description": "YourSite: Fortschrittliche Technologielösungen",
+      "navigation": {
+        "items": {
+          "news": {
+            "label": "Nachrichten",
+            "href": "tag:nachrichten"
+          },
+          "about": {
+            "label": "Über uns",
+            "href": "#about"
+          },
+          "services": {
+            "label": "Dienste",
+            "href": "#services"
+          },
+          "contact": {
+            "label": "Kontakt",
+            "href": "#contact"
+          }
+        }
+      }
+    }
   }
 }

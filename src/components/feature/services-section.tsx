@@ -10,6 +10,8 @@ import {
 import type * as React from "react";
 import { HeadingAnimation } from "@/components/common/heading-animation";
 import services from "@/content/services.json";
+import { getDictionary } from "@/i18n/get-dictionary";
+import type { Locale } from "@/lib/config/site.types";
 
 // Map string icon names from JSON to Lucide components
 const IconMap: Record<string, React.ElementType> = {
@@ -21,19 +23,18 @@ const IconMap: Record<string, React.ElementType> = {
   ShieldCheck,
 };
 
-export default function ServicesSection() {
+export default async function ServicesSection({ locale }: { locale: Locale }) {
+  const dict = await getDictionary(locale);
+
   return (
     <section id="services" className="container mx-auto px-4 py-20 md:py-32">
       <div className="flex flex-col items-center text-center mb-16">
         <div className="inline-flex items-center rounded-full border px-4 py-1.5 text-sm font-medium mb-6">
           <Sparkles className="mr-2 h-4 w-4 text-primary" />
-          All Services
+          {dict.services.badge}
         </div>
         <h2 className="text-3xl md:text-5xl font-bold tracking-tight max-w-2xl">
-          <HeadingAnimation>
-            Custom Solutions <br className="hidden md:inline" /> For Your
-            Digital Growth
-          </HeadingAnimation>
+          <HeadingAnimation>{dict.services.title}</HeadingAnimation>
         </h2>
       </div>
 
