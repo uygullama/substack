@@ -1,11 +1,9 @@
 "use client";
 
 import { Menu, X } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import * as React from "react";
-import logo from "@/assets/logo.svg";
 import { Button } from "@/components/ui/button";
 import siteData from "@/data/site.json";
 import { cn } from "@/lib/utils";
@@ -65,8 +63,19 @@ export default function Header() {
 
       <header className="fixed top-6 left-1/2 z-50 w-[calc(100%-2rem)] max-w-6xl -translate-x-1/2 rounded-xl border bg-background/80 backdrop-blur-md px-4 py-3 shadow-sm transition-all">
         <div className="flex items-center justify-between">
-          <Link href="/" className="flex items-center">
-            <Image src={logo} alt={siteData.siteName} className="h-8 w-auto" />
+          <Link href="/" className="flex items-center space-x-2">
+            {/* biome-ignore lint/performance/noImgElement: SVG optimization not needed */}
+            <img
+              src="/logo.svg"
+              alt={siteData.siteName}
+              className="h-10 w-auto"
+            />
+            {/* biome-ignore lint/performance/noImgElement: SVG optimization not needed */}
+            <img
+              src="/logotype.svg"
+              alt={siteData.siteName}
+              className="h-8 w-auto"
+            />
           </Link>
 
           {/* Desktop Navigation */}
@@ -123,8 +132,9 @@ export default function Header() {
                 className="flex items-center"
                 onClick={() => setIsOpen(false)}
               >
-                <Image
-                  src={logo}
+                {/* biome-ignore lint/performance/noImgElement: SVG optimization not needed */}
+                <img
+                  src="/logo.svg"
                   alt={siteData.siteName}
                   className="h-8 w-auto"
                 />

@@ -1,6 +1,4 @@
 import { Rss } from "lucide-react";
-import Image from "next/image";
-import logo from "@/assets/logo.svg";
 import DevelopedBy from "@/components/common/developed-by";
 import siteData from "@/data/site.json";
 
@@ -142,15 +140,17 @@ export default function Footer() {
       <div className="relative mx-auto max-w-7xl px-4 flex flex-col items-center select-none overflow-hidden -mb-4">
         <div className="opacity-10 pointer-events-none flex flex-col items-center w-full">
           {/* Main Logo */}
-          <Image
-            src={logo}
+          {/* biome-ignore lint/performance/noImgElement: SVG optimization not needed */}
+          <img
+            src="/logotype.svg"
             alt={siteData.siteName}
             className="w-full h-auto object-contain"
           />
 
           {/* Mirror Reflection */}
-          <Image
-            src={logo}
+          {/* biome-ignore lint/performance/noImgElement: SVG optimization not needed */}
+          <img
+            src="/logotype.svg"
             alt={`${siteData.siteName} reflection`}
             className="w-full h-auto object-contain opacity-50"
             style={{

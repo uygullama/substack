@@ -1,11 +1,12 @@
-import { copyFileSync, existsSync, mkdirSync } from "node:fs";
+import { existsSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
+import sharp from "sharp";
 
-const ASSETS_DIR = join(process.cwd(), "src/assets");
+const ASSETS_DIR = join(process.cwd(), "assets");
 const PUBLIC_DIR = join(process.cwd(), "public");
 
-function generateAssets() {
-  console.log("Generating assets from src/assets...");
+async function generateAssets() {
+  console.log("Generating assets from assets using sharp...");
 
   // Ensure public directory exists
   if (!existsSync(PUBLIC_DIR)) {
@@ -13,10 +14,15 @@ function generateAssets() {
   }
 
   const assetMapping = [
-    { src: "favicon.png", dest: "favicon.ico" }, // using png as ico, browsers support it, or keep as icon.png
-    { src: "icon.png", dest: "icon.png" },
-    { src: "icon.png", dest: "apple-icon.png" },
-    { src: "og-image.png", dest: "opengraph-image.png" },
+    { src: "favicon.svg", dest: "favicon.ico", size: 32 },
+    { src: "icon.svg", dest: "icon.png", size: 512 },
+    { src: "icon.svg", dest: "apple-icon.png", size: 180 },
+    {
+      src: "og-image.svg",
+      dest: "opengraph-image.png",
+      width: 1200,
+      height: 630,
+    },
   ];
 
   for (const asset of assetMapping) {
@@ -24,8 +30,26 @@ function generateAssets() {
     const destPath = join(PUBLIC_DIR, asset.dest);
 
     if (existsSync(srcPath)) {
-      copyFileSync(srcPath, destPath);
-      console.log(`✅ Copied ${asset.src} to public/${asset.dest}`);
+      try {
+        if (asset.width && asset.height) {
+          await sharp(srcPath)
+            .resize(asset.width, asset.height, {
+              fit: "contain",
+              background: { r: 0, g: 0, b: 0, alpha: 0 },
+            })
+            .toFile(destPath);
+        } else if (asset.size) {
+          await sharp(srcPath)
+            .resize(asset.size, asset.size, {
+              fit: "contain",
+              background: { r: 0, g: 0, b: 0, alpha: 0 },
+            })
+            .toFile(destPath);
+        }
+        console.log(`✅ Generated ${asset.src} -> public/${asset.dest}`);
+      } catch (error) {
+        console.error(`❌ Error generating ${asset.dest}:`, error);
+      }
     } else {
       console.warn(`⚠️ Warning: ${asset.src} not found in src/assets.`);
     }
