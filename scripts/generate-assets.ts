@@ -51,7 +51,7 @@ async function generateAssets() {
         console.error(`❌ Error generating ${asset.dest}:`, error);
       }
     } else {
-      console.warn(`⚠️ Warning: ${asset.src} not found in src/assets.`);
+      console.warn(`⚠️ Warning: ${asset.src} not found in assets/.`);
     }
   }
 

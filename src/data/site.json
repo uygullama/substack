@@ -2,7 +2,7 @@
   "$schema": "../lib/config/site.schema.ts",
   "schemaVersion": 2,
   "i18n": {
-    "defaultLocale": "tr",
+    "defaultLocale": "en",
     "locales": {
       "tr": {
         "enabled": true,
