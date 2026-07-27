@@ -25,11 +25,11 @@ const contactSchema = z.object({
 });
 
 const substackSourceSchema = z.object({
-  pages: z.record(z.string()).optional(),
-  tags: z.record(z.string()).optional(),
+  pages: z.record(z.string(), z.record(z.string(), z.string())).optional(),
+  tags: z.record(z.string(), z.array(z.string())).optional(),
 });
 
-const localeSourceConfigSchema = z.object({
+const sourcesSchema = z.object({
   substack: substackSourceSchema.optional(),
 });
 
@@ -38,14 +38,14 @@ const navigationItemSchema = z.object({
   href: z.string().optional(),
 });
 
-const navigationSchema = z.object({
-  items: z.record(navigationItemSchema),
-});
-
 const siteContentSchema = z.object({
-  siteName: z.string().optional(),
-  description: z.string().optional(),
-  navigation: navigationSchema.optional(),
+  siteName: z.record(z.string(), z.string()).optional(),
+  description: z.record(z.string(), z.string()).optional(),
+  navigation: z
+    .object({
+      header: z.array(z.record(z.string(), navigationItemSchema)).optional(),
+    })
+    .optional(),
 });
 
 export const siteConfigSchema = z.object({
@@ -61,6 +61,6 @@ export const siteConfigSchema = z.object({
     socials: socialsSchema.optional(),
     contact: contactSchema.optional(),
   }),
-  sources: z.record(localeSourceConfigSchema),
-  content: z.record(siteContentSchema),
+  sources: sourcesSchema.optional(),
+  content: siteContentSchema,
 });

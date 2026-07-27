@@ -33,6 +33,7 @@
   "shared": {
     "url": "https://example.com",
     "substack": "https://uygulama.substack.com",
+    "web3formsAccessKey": "your-web3forms-access-key-here",
     "socials": {
       "twitter": "https://twitter.com/example",
       "linkedin": "https://linkedin.com/company/example",
@@ -48,109 +49,91 @@
     }
   },
   "sources": {
-    "tr": {
-      "substack": {
-        "pages": {
-          "about": "hakkmzda"
-        },
-        "tags": {
-          "news": "haberler"
+    "substack": {
+      "pages": {
+        "about": {
+          "tr": "hakkmzda",
+          "en": "about-us",
+          "de": "ueber-uns"
         }
-      }
-    },
-    "en": {
-      "substack": {
-        "pages": {
-          "about": "about-us"
-        },
-        "tags": {
-          "news": "news"
-        }
-      }
-    },
-    "de": {
-      "substack": {
-        "pages": {
-          "about": "ueber-uns"
-        },
-        "tags": {
-          "news": "nachrichten"
-        }
+      },
+      "tags": {
+        "tr": ["haberler"],
+        "en": ["news"],
+        "de": ["nachrichten"]
       }
     }
   },
   "content": {
-    "tr": {
-      "siteName": "YourSite",
-      "description": "YourSite: Gelişmiş Teknoloji Çözümleri",
-      "navigation": {
-        "items": {
-          "news": {
+    "siteName": {
+      "tr": "YourSite",
+      "en": "YourSite",
+      "de": "YourSite"
+    },
+    "description": {
+      "tr": "YourSite: Gelişmiş Teknoloji Çözümleri",
+      "en": "YourSite: Advanced Technology Solutions",
+      "de": "YourSite: Fortschrittliche Technologielösungen"
+    },
+    "navigation": {
+      "header": [
+        {
+          "tr": {
             "label": "Haberler",
             "href": "tag:haberler"
           },
-          "about": {
-            "label": "Hakkında",
-            "href": "#about"
-          },
-          "services": {
-            "label": "Hizmetler",
-            "href": "#services"
-          },
-          "contact": {
-            "label": "İletişim",
-            "href": "#contact"
-          }
-        }
-      }
-    },
-    "en": {
-      "siteName": "YourSite",
-      "description": "YourSite: Advanced Technology Solutions",
-      "navigation": {
-        "items": {
-          "news": {
+          "en": {
             "label": "News",
             "href": "tag:news"
           },
-          "about": {
+          "de": {
+            "label": "Nachrichten",
+            "href": "tag:nachrichten"
+          }
+        },
+        {
+          "tr": {
+            "label": "Hakkında",
+            "href": "#about"
+          },
+          "en": {
             "label": "About",
             "href": "#about"
           },
-          "services": {
+          "de": {
+            "label": "Über uns",
+            "href": "#about"
+          }
+        },
+        {
+          "tr": {
+            "label": "Hizmetler",
+            "href": "#services"
+          },
+          "en": {
             "label": "Services",
             "href": "#services"
           },
-          "contact": {
-            "label": "Contact",
-            "href": "#contact"
-          }
-        }
-      }
-    },
-    "de": {
-      "siteName": "YourSite",
-      "description": "YourSite: Fortschrittliche Technologielösungen",
-      "navigation": {
-        "items": {
-          "news": {
-            "label": "Nachrichten",
-            "href": "tag:nachrichten"
-          },
-          "about": {
-            "label": "Über uns",
-            "href": "#about"
-          },
-          "services": {
+          "de": {
             "label": "Dienste",
             "href": "#services"
+          }
+        },
+        {
+          "tr": {
+            "label": "İletişim",
+            "href": "#contact"
           },
-          "contact": {
+          "en": {
+            "label": "Contact",
+            "href": "#contact"
+          },
+          "de": {
             "label": "Kontakt",
             "href": "#contact"
           }
         }
-      }
+      ]
     }
   }
 }

@@ -42,15 +42,12 @@ export default function Header({
     router.push(newPath);
   };
 
-  // We convert object items to array for map
-  const navigationItems = Object.entries(
-    config.content.navigation?.items || {},
-  ).map(([id, item]) => ({ id, ...item }));
+  const navigationItems = config.content.navigation?.header || [];
 
   const getHref = (href: string | undefined) => {
     if (!href) return localizedPath(locale, "/");
     if (href.startsWith("tag:")) {
-      return localizedPath(locale, `/${href.replace("tag:", "")}`);
+      return localizedPath(locale, `/tags/${href.replace("tag:", "")}`);
     }
     if (href.startsWith("#")) {
       return localizedPath(locale, `/${href}`);
@@ -119,7 +116,7 @@ export default function Header({
               const href = getHref(item.href);
               return (
                 <Link
-                  key={item.id}
+                  key={item.label}
                   href={href}
                   className={cn(
                     "text-sm font-medium transition-colors hover:text-foreground relative",
@@ -156,7 +153,7 @@ export default function Header({
               ))}
             </div>
             <Button asChild className="rounded-full px-6">
-              <Link href={getHref("#contact")}>{dict.getDirections}</Link>
+              <Link href={getHref("#contact")}>{dict.contactUs}</Link>
             </Button>
           </div>
 
@@ -196,7 +193,7 @@ export default function Header({
                     href={getHref("#contact")}
                     onClick={() => setIsOpen(false)}
                   >
-                    {dict.getDirections}
+                    {dict.contactUs}
                   </Link>
                 </Button>
                 <Button
@@ -214,7 +211,7 @@ export default function Header({
             <nav className="flex flex-col gap-4">
               {navigationItems.map((item) => (
                 <Link
-                  key={item.id}
+                  key={item.label}
                   href={getHref(item.href)}
                   onClick={() => setIsOpen(false)}
                   className={cn(

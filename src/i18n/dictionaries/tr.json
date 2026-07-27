@@ -12,9 +12,12 @@
     "by": "Yazar",
     "publishedOn": "Yayınlanma tarihi",
     "noPosts": "Henüz yazı bulunmamaktadır.",
+    "noTags": "Henüz etiket bulunmamaktadır.",
     "home": "Ana Sayfa",
     "news": "Haberler",
-    "readOnSubstack": "Substack'te Oku"
+    "tags": "Etiketler",
+    "readOnSubstack": "Substack'te Oku",
+    "minRead": "dakika okuma"
   },
   "nav": {
     "toggleMenu": "Menüyü Aç/Kapat",
@@ -54,6 +57,20 @@
     "description": "İş süreçlerinizi iyileştiren sürdürülebilir ve yenilikçi yazılım çözümleri sunuyoruz. Sizin için teknoloji dünyasındaki gelişmeleri takip ediyor ve uyguluyoruz.",
     "getDirections": "Yol Tarifi Al",
     "aboutUs": "Hakkımızda"
+  },
+  "contactForm": {
+    "nameLabel": "Ad Soyad",
+    "namePlaceholder": "Adınız ve Soyadınız",
+    "emailLabel": "E-posta",
+    "emailPlaceholder": "ornek@sirket.com",
+    "phoneLabel": "Telefon",
+    "phonePlaceholder": "05XX XXX XX XX",
+    "messageLabel": "Mesaj",
+    "messagePlaceholder": "Size nasıl yardımcı olabiliriz?",
+    "submitButton": "Gönder",
+    "submittingButton": "Gönderiliyor...",
+    "successMessage": "Mesajınız başarıyla gönderildi!",
+    "errorMessage": "Bir hata oluştu, lütfen tekrar deneyin."
   },
   "contact": {
     "title": "Bize Ulaşın",

@@ -5,26 +5,28 @@ import { getArchivePosts, type SubstackPost } from "@/app/actions";
 import type { Locale } from "@/lib/config/site.types";
 import PostCard from "./post-card";
 
-export default function PostList({
+export default function FilteredPostList({
   initialPosts,
-  postTagId,
   locale,
   dict,
+  validTagSlugs,
 }: {
   initialPosts: SubstackPost[];
-  postTagId?: string;
   locale: Locale;
   dict: Record<string, string>;
+  validTagSlugs: string[];
 }) {
   const [posts, setPosts] = useState<SubstackPost[]>(initialPosts);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(initialPosts.length === 20);
+  const [apiOffset, setApiOffset] = useState(initialPosts.length);
 
   const loadMore = async () => {
     setLoading(true);
     try {
-      const nextPosts = await getArchivePosts(posts.length, 20, postTagId);
+      const nextPosts = await getArchivePosts(apiOffset, 20);
       setPosts((prev) => [...prev, ...nextPosts]);
+      setApiOffset((prev) => prev + nextPosts.length);
 
       // If we received less than 20, there are no more posts
       if (nextPosts.length < 20) {
@@ -37,15 +39,22 @@ export default function PostList({
     }
   };
 
+  const displayPosts =
+    validTagSlugs && validTagSlugs.length > 0
+      ? posts.filter((post) =>
+          post.postTags?.some((tag) => validTagSlugs.includes(tag.slug)),
+        )
+      : posts;
+
   return (
     <div className="flex flex-col">
-      {posts.length === 0 ? (
+      {displayPosts.length === 0 ? (
         <div className="text-center py-24 text-muted-foreground">
           {dict.noPosts || "No posts found yet."}
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {posts.map((item) => (
+          {displayPosts.map((item) => (
             <PostCard key={item.id} item={item} locale={locale} dict={dict} />
           ))}
         </div>

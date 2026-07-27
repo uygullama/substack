@@ -1,6 +1,4 @@
-import Image from "next/image";
 import Link from "next/link";
-import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Carousel,
   CarouselContent,
@@ -10,31 +8,26 @@ import {
 } from "@/components/ui/carousel";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { localizedPath } from "@/lib/config/site.paths";
+import { getResolvedSiteConfig } from "@/lib/config/site.resolver";
 import type { Locale } from "@/lib/config/site.types";
 import { substack } from "@/lib/substack";
+import PostCard from "./post-card";
 
 export default async function NewsCarousel({ locale }: { locale: Locale }) {
   const dict = await getDictionary(locale);
+  const config = getResolvedSiteConfig(locale);
+  const validTagSlugs = config.source.substack?.tags?.[locale] || [];
+
   try {
-    const posts = await substack.getPosts(0, 10);
+    const fetchedPosts = await substack.getPosts(0, 20);
+    const posts =
+      validTagSlugs && validTagSlugs.length > 0
+        ? fetchedPosts.filter((post) =>
+            post.postTags?.some((tag) => validTagSlugs.includes(tag.slug)),
+          )
+        : fetchedPosts;
 
-    const items = posts.map((item) => {
-      return {
-        title: item.title,
-        slug: item.slug,
-        subtitle: item.subtitle || item.description || "",
-        imageUrl: item.cover_image,
-        pubDate: item.post_date
-          ? new Date(item.post_date).toLocaleDateString(locale, {
-              month: "short",
-              day: "numeric",
-              year: "numeric",
-            })
-          : "",
-      };
-    });
-
-    if (items.length === 0) {
+    if (posts.length === 0) {
       return null;
     }
 
@@ -67,47 +60,12 @@ export default async function NewsCarousel({ locale }: { locale: Locale }) {
               className="w-full"
             >
               <CarouselContent className="-ml-4">
-                {items.map((item) => (
+                {posts.map((item) => (
                   <CarouselItem
                     key={item.slug}
                     className="pl-4 md:basis-1/2 lg:basis-1/3"
                   >
-                    <Link
-                      href={localizedPath(locale, `/posts/${item.slug}`)}
-                      className="block h-full"
-                    >
-                      <div className="border rounded-lg shadow-sm bg-background overflow-hidden h-full flex flex-col hover:border-primary/50 transition-colors">
-                        {item.imageUrl ? (
-                          <div className="relative w-full h-48 bg-muted border-b">
-                            <Image
-                              src={item.imageUrl}
-                              alt={item.title || "News image"}
-                              fill
-                              className="object-cover"
-                            />
-                          </div>
-                        ) : (
-                          <div className="w-full h-48 bg-muted flex items-center justify-center border-b">
-                            <span className="text-muted-foreground">
-                              {dict.common.noImage}
-                            </span>
-                          </div>
-                        )}
-                        <CardHeader className="p-4 pb-2">
-                          <div className="text-xs text-muted-foreground mb-2">
-                            {item.pubDate}
-                          </div>
-                          <CardTitle className="text-lg leading-tight line-clamp-2">
-                            {item.title}
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent className="p-4 pt-0 flex-1">
-                          <p className="text-sm text-muted-foreground line-clamp-3">
-                            {item.subtitle}
-                          </p>
-                        </CardContent>
-                      </div>
-                    </Link>
+                    <PostCard item={item} locale={locale} dict={dict.common} />
                   </CarouselItem>
                 ))}
               </CarouselContent>

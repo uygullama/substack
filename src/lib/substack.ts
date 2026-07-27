@@ -133,23 +133,26 @@ class SubstackAPI implements SubStack {
     }
   }
 
-  getTagBySlug(slug: string): TagData | null {
-    const tagsPath = path.join(process.cwd(), "src/data/tags.json");
+  getTags(): TagData[] {
+    const tagsPath = path.join(process.cwd(), "src/data/substack-tags.json");
     let tags: TagData[] = [];
     try {
       if (fs.existsSync(tagsPath)) {
         const fileContent = fs.readFileSync(tagsPath, "utf-8");
-        tags = JSON.parse(fileContent);
+        const parsed = JSON.parse(fileContent);
+        if (parsed && Array.isArray(parsed.tags)) {
+          tags = parsed.tags;
+        }
       }
     } catch (error) {
-      console.error("Error reading tags.json:", error);
+      console.error("Error reading substack-tags.json:", error);
     }
+    return tags;
+  }
 
-    const tagMap: Record<string, string> =
-      (siteData as { tagMap?: Record<string, string> }).tagMap || {};
-    const mappedSlug = tagMap[slug] || slug;
-
-    return tags.find((t) => t.slug === mappedSlug || t.slug === slug) || null;
+  getTagBySlug(slug: string): TagData | null {
+    const tags = this.getTags();
+    return tags.find((t) => t.slug === slug) || null;
   }
 }
 

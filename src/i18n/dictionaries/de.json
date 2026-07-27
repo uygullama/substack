@@ -12,9 +12,12 @@
     "by": "Von",
     "publishedOn": "Veröffentlicht am",
     "noPosts": "Noch keine Beiträge gefunden.",
+    "noTags": "Keine Schlagwörter verfügbar.",
     "home": "Startseite",
     "news": "Nachrichten",
-    "readOnSubstack": "Auf Substack lesen"
+    "tags": "Schlagwörter",
+    "readOnSubstack": "Auf Substack lesen",
+    "minRead": "Min. Lesezeit"
   },
   "nav": {
     "toggleMenu": "Menü umschalten",
@@ -54,6 +57,20 @@
     "description": "Wir bieten nachhaltige und innovative Softwarelösungen, die Ihre Geschäftsprozesse verbessern. Wir verfolgen und implementieren die neuesten Entwicklungen in der Technologiewelt für Sie.",
     "getDirections": "Route berechnen",
     "aboutUs": "Über uns"
+  },
+  "contactForm": {
+    "nameLabel": "Vollständiger Name",
+    "namePlaceholder": "Ihr Vor- und Nachname",
+    "emailLabel": "E-Mail",
+    "emailPlaceholder": "beispiel@firma.com",
+    "phoneLabel": "Telefon",
+    "phonePlaceholder": "+49 XXX XXX XXXX",
+    "messageLabel": "Nachricht",
+    "messagePlaceholder": "Wie können wir Ihnen helfen?",
+    "submitButton": "Senden",
+    "submittingButton": "Wird gesendet...",
+    "successMessage": "Ihre Nachricht wurde erfolgreich gesendet!",
+    "errorMessage": "Ein Fehler ist aufgetreten, bitte versuchen Sie es erneut."
   },
   "contact": {
     "title": "Kontaktiere uns",

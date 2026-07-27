@@ -48,19 +48,25 @@ Copy `env.sample` to `.env` and configure the necessary variables:
 
 ## Multi-Language Support (Adding a New Language)
 
-The template supports multiple languages. To add a new language:
-1. Open `src/data/site.json` and add the new language configuration under `i18n.locales` (e.g., `"fr": { "enabled": true, ... }`).
-2. Add the language's localized configurations under the `sources` and `content` sections in `src/data/site.json`.
+The template supports multiple languages natively. To add a new language:
+1. Open `src/data/site.json` and add the new language configuration under `i18n.locales` (e.g., `"fr": { "enabled": true, "label": "Français", "direction": "ltr" }`).
+2. Provide the localized values in `src/data/site.json` under `content` (e.g., `siteName.fr`, `navigation.header.fr`).
 3. Create a new dictionary file in `src/i18n/dictionaries/` (e.g., `fr.json`) with your translated strings.
-4. The application will automatically detect and route the new locale (e.g., `/fr`).
+4. If you have MDX pages, create the localized versions (e.g., `src/content/about-fr.mdx`).
+5. Map any tags and static pages for this locale under `sources.substack.tags.fr` and `sources.substack.pages.about.fr` in `site.json`.
+
+## MDX Support & Contact Form
+
+- **MDX**: You can create fully localized markdown pages (like "About Us") in the `src/content/` directory. Use the `MdxSection` component to embed them within feature pages (like `home.tsx`).
+- **Contact Form**: The template includes a built-in Contact Form powered by Web3Forms. It is currently passive. To activate it, simply provide your access key under `shared.web3formsAccessKey` in `site.json` and enable the `<Web3FormsContact>` component in `contact-section.tsx`.
 
 ## Substack Tags
 
 To dynamically categorize and filter your Substack posts on the website:
 1. Ensure your posts on Substack are tagged.
-2. Run `bun run get-tags` to fetch your latest tags directly from Substack.
-3. Map these tags in `src/data/site.json` under `sources.[locale].substack.tags`.
-4. You can easily add these tags to your header navigation by updating `content.[locale].navigation.items` with a link format of `tag:[your-tag-name]`.
+2. Update `src/data/site.json` under `sources.substack.tags.[locale]` with an array of the tag slugs you want to display (e.g., `["news"]`).
+3. You can easily add these tags to your header navigation by updating `content.navigation.header.[locale]` in `site.json` with a link format of `tag:[your-tag-name]`.
+4. Posts displayed on the homepage and `/posts` page will automatically filter based on these valid localized tags.
 
 ## Image Generation
 

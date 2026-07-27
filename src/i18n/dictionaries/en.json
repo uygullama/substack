@@ -12,9 +12,12 @@
     "by": "By",
     "publishedOn": "Published on",
     "noPosts": "No posts found yet.",
+    "noTags": "No tags available.",
     "home": "Home",
     "news": "News",
-    "readOnSubstack": "Read on Substack"
+    "tags": "Tags",
+    "readOnSubstack": "Read on Substack",
+    "minRead": "min read"
   },
   "nav": {
     "toggleMenu": "Toggle Menu",
@@ -54,6 +57,20 @@
     "description": "We provide sustainable and innovative software solutions that improve your business processes. We follow and apply the developments in the technology world for you.",
     "getDirections": "Get Directions",
     "aboutUs": "About Us"
+  },
+  "contactForm": {
+    "nameLabel": "Full Name",
+    "namePlaceholder": "Your First and Last Name",
+    "emailLabel": "Email",
+    "emailPlaceholder": "example@company.com",
+    "phoneLabel": "Phone",
+    "phonePlaceholder": "+1 XXX XXX XXXX",
+    "messageLabel": "Message",
+    "messagePlaceholder": "How can we help you?",
+    "submitButton": "Submit",
+    "submittingButton": "Sending...",
+    "successMessage": "Your message was sent successfully!",
+    "errorMessage": "An error occurred, please try again."
   },
   "contact": {
     "title": "Contact Us",

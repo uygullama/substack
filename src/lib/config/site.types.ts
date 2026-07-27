@@ -26,11 +26,20 @@ export interface Contact {
 
 export interface SubstackSource {
   pages?: Record<string, string>;
-  tags?: Record<string, string>;
+  tags?: Record<string, string[]>; // Now tags maps a key to an array of slugs for that locale? Wait no.
 }
 
 export interface LocaleSourceConfig {
   substack?: SubstackSource;
+}
+
+export interface GlobalSubstackSource {
+  pages?: Record<string, Record<string, string>>;
+  tags?: Record<string, string[]>;
+}
+
+export interface GlobalSourcesConfig {
+  substack?: GlobalSubstackSource;
 }
 
 export interface NavigationItem {
@@ -38,14 +47,14 @@ export interface NavigationItem {
   href?: string;
 }
 
-export interface Navigation {
-  items: Record<string, NavigationItem>;
+export interface GlobalNavigation {
+  header?: Array<Record<string, NavigationItem>>;
 }
 
-export interface SiteContent {
-  siteName?: string;
-  description?: string;
-  navigation?: Navigation;
+export interface GlobalSiteContent {
+  siteName?: Record<string, string>;
+  description?: Record<string, string>;
+  navigation?: GlobalNavigation;
 }
 
 export interface SiteConfig {
@@ -61,14 +70,18 @@ export interface SiteConfig {
     socials?: Socials;
     contact?: Contact;
   };
-  sources: Record<Locale, LocaleSourceConfig>;
-  content: Record<Locale, SiteContent>;
+  sources?: GlobalSourcesConfig;
+  content: GlobalSiteContent;
+}
+
+export interface ResolvedNavigation {
+  header?: Array<NavigationItem>;
 }
 
 export interface ResolvedSiteContent {
   siteName: string;
   description: string;
-  navigation: Navigation;
+  navigation: ResolvedNavigation;
 }
 
 export interface ResolvedSiteConfig {

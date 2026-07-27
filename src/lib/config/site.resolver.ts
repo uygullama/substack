@@ -50,52 +50,51 @@ export function getLocaleMeta(locale: Locale): LocaleMeta {
 }
 
 export function getLocaleSource(locale: Locale): LocaleSourceConfig {
-  return siteConfig.sources[locale] || {};
-}
+  const globalSources = siteConfig.sources?.substack || {};
 
-// Deep merge helper that overrides arrays but merges objects
-function deepMerge<T extends object, U extends object>(
-  target: T,
-  source: U,
-): T & U {
-  const output = { ...target } as Record<string, unknown>;
-  if (isObject(target) && isObject(source)) {
-    Object.keys(source).forEach((key) => {
-      const sourceKey = key as keyof U;
-      const targetKey = key as keyof T;
-      const sourceVal = source[sourceKey];
-
-      if (isObject(sourceVal)) {
-        if (!(key in target)) {
-          Object.assign(output, { [key]: sourceVal });
-        } else {
-          output[key] = deepMerge(
-            target[targetKey] as object,
-            sourceVal as object,
-          );
-        }
-      } else if (Array.isArray(sourceVal)) {
-        // override array completely
-        output[key] = sourceVal;
-      } else {
-        Object.assign(output, { [key]: sourceVal });
+  const pages: Record<string, string> = {};
+  if (globalSources.pages) {
+    for (const [pageKey, translations] of Object.entries(globalSources.pages)) {
+      if (translations[locale]) {
+        pages[pageKey] = translations[locale];
       }
-    });
+    }
   }
-  return output as T & U;
-}
 
-function isObject(item: unknown): item is Record<string, unknown> {
-  return item !== null && typeof item === "object" && !Array.isArray(item);
+  // The new tags structure maps locale to an array of slugs
+  const tags: Record<string, string[]> = {};
+  if (globalSources.tags?.[locale]) {
+    // We can just pass the array for this locale. We will map it to a dummy key like 'all' if needed, or just return the tags object.
+    tags[locale] = globalSources.tags[locale];
+  }
+
+  return {
+    substack: {
+      pages: Object.keys(pages).length > 0 ? pages : undefined,
+      tags: Object.keys(tags).length > 0 ? tags : undefined,
+    },
+  };
 }
 
 export function getResolvedSiteContent(locale: Locale): ResolvedSiteContent {
-  const baseContent = siteConfig.content[defaultLocale] || {};
-  const overrideContent =
-    locale !== defaultLocale ? siteConfig.content[locale] || {} : {};
+  const content = siteConfig.content;
 
-  // Deep merge override on top of base
-  return deepMerge(baseContent, overrideContent) as ResolvedSiteContent;
+  const resolveString = (obj?: Record<string, string>) => {
+    if (!obj) return "";
+    return obj[locale] || obj[defaultLocale] || "";
+  };
+
+  const header = (content.navigation?.header || []).map((item) => {
+    return item[locale] || item[defaultLocale] || { label: "" };
+  });
+
+  return {
+    siteName: resolveString(content.siteName),
+    description: resolveString(content.description),
+    navigation: {
+      header,
+    },
+  };
 }
 
 export function getResolvedSiteConfig(locale: Locale): ResolvedSiteConfig {
