@@ -7,29 +7,32 @@ import PostCard from "./post-card";
 
 export default function PostList({
   initialPosts,
+  initialCursor = null,
   postTagId,
   locale,
   dict,
 }: {
   initialPosts: SubstackPost[];
+  initialCursor?: string | null;
   postTagId?: string;
   locale: Locale;
   dict: Record<string, string>;
 }) {
   const [posts, setPosts] = useState<SubstackPost[]>(initialPosts);
+  const [cursor, setCursor] = useState<string | null>(initialCursor);
   const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(initialPosts.length === 20);
 
   const loadMore = async () => {
+    if (!cursor) return;
     setLoading(true);
     try {
-      const nextPosts = await getArchivePosts(posts.length, 20, postTagId);
+      const { posts: nextPosts, nextCursor } = await getArchivePosts(
+        20,
+        postTagId,
+        cursor,
+      );
       setPosts((prev) => [...prev, ...nextPosts]);
-
-      // If we received less than 20, there are no more posts
-      if (nextPosts.length < 20) {
-        setHasMore(false);
-      }
+      setCursor(nextCursor);
     } catch (err) {
       console.error("Error loading more posts", err);
     } finally {
@@ -51,7 +54,7 @@ export default function PostList({
         </div>
       )}
 
-      {hasMore && (
+      {cursor && (
         <div className="mt-12 flex justify-center">
           <button
             type="button"

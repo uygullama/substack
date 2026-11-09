@@ -45,7 +45,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   );
 
   // Fetch posts from substack
-  const posts = await substack.getPosts(0, 100);
+  const { posts } = await substack.getPosts(100);
   const postRoutes = posts.map((post) => ({
     url: `${baseUrl}/posts/${post.slug}`,
     lastModified: new Date(post.post_date),

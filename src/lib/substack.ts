@@ -36,12 +36,17 @@ export interface Section {
   slug: string;
 }
 
+export interface ArchiveResponse {
+  posts: PostSummary[];
+  nextCursor: string | null;
+}
+
 export interface SubStack {
   getPosts(
-    offset?: number,
     limit?: number,
     postTagId?: string,
-  ): Promise<PostSummary[]>;
+    cursor?: string,
+  ): Promise<ArchiveResponse>;
   getPost(slug: string): Promise<Post | null>;
   getSections(): Promise<Section[]>;
   search(query: string): Promise<PostSummary[]>;
@@ -54,16 +59,19 @@ class SubstackAPI implements SubStack {
   }
 
   async getPosts(
-    offset = 0,
     limit = 20,
     postTagId?: string,
-  ): Promise<PostSummary[]> {
+    cursor?: string,
+  ): Promise<ArchiveResponse> {
     try {
       const params = new URLSearchParams({
         sort: "new",
-        offset: String(offset),
         limit: String(limit),
       });
+
+      if (cursor) {
+        params.append("cursor", cursor);
+      }
 
       if (postTagId) {
         params.append("post_tag_id", postTagId);
@@ -76,14 +84,22 @@ class SubstackAPI implements SubStack {
 
       if (!res.ok) {
         console.error("Failed to fetch posts:", res.statusText);
-        return [];
+        return { posts: [], nextCursor: null };
       }
 
-      const data = await res.json();
-      return data as PostSummary[];
+      const data = (await res.json()) as
+        | PostSummary[]
+        | { posts?: PostSummary[]; nextCursor?: string | null };
+      const rawPosts = Array.isArray(data) ? data : (data.posts ?? []);
+      const nextCursor = Array.isArray(data) ? null : (data.nextCursor ?? null);
+
+      return {
+        posts: rawPosts,
+        nextCursor,
+      };
     } catch (error) {
       console.error("Error fetching posts:", error);
-      return [];
+      return { posts: [], nextCursor: null };
     }
   }
 
@@ -125,8 +141,10 @@ class SubstackAPI implements SubStack {
         return [];
       }
 
-      const data = await res.json();
-      return data as PostSummary[];
+      const data = (await res.json()) as
+        | PostSummary[]
+        | { posts?: PostSummary[] };
+      return Array.isArray(data) ? data : (data.posts ?? []);
     } catch (error) {
       console.error(`Error searching for ${query}:`, error);
       return [];

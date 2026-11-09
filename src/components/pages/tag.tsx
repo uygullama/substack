@@ -35,9 +35,9 @@ export async function TagPage({
   // We create a fallback object so we can render the empty state.
   const resolvedTagData = tagData || { id: "", name: tag, slug: tag };
 
-  const initialPosts = resolvedTagData.id
-    ? await getArchivePosts(0, 20, resolvedTagData.id)
-    : [];
+  const { posts: initialPosts, nextCursor } = resolvedTagData.id
+    ? await getArchivePosts(20, resolvedTagData.id)
+    : { posts: [], nextCursor: null };
   const dict = await getDictionary(locale);
 
   return (
@@ -73,6 +73,7 @@ export async function TagPage({
 
       <PostList
         initialPosts={initialPosts}
+        initialCursor={nextCursor}
         postTagId={resolvedTagData.id}
         locale={locale}
         dict={{ ...dict.common, noPosts: dict.post.noPosts }}

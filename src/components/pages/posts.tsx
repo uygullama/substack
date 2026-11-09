@@ -14,7 +14,7 @@ import { getResolvedSiteConfig } from "@/lib/config/site.resolver";
 import type { Locale } from "@/lib/config/site.types";
 
 export async function PostsPage({ locale }: { locale: Locale }) {
-  const initialPosts = await getArchivePosts(0, 20);
+  const { posts: initialPosts, nextCursor } = await getArchivePosts(20);
   const dict = await getDictionary(locale);
   const config = getResolvedSiteConfig(locale);
   const validTagSlugs = config.source.substack?.tags?.[locale] || [];
@@ -46,6 +46,7 @@ export async function PostsPage({ locale }: { locale: Locale }) {
 
       <FilteredPostList
         initialPosts={initialPosts}
+        initialCursor={nextCursor}
         locale={locale}
         dict={{ ...dict.common, noPosts: dict.post.noPosts }}
         validTagSlugs={validTagSlugs}

@@ -7,31 +7,32 @@ import PostCard from "./post-card";
 
 export default function FilteredPostList({
   initialPosts,
+  initialCursor = null,
   locale,
   dict,
   validTagSlugs,
 }: {
   initialPosts: SubstackPost[];
+  initialCursor?: string | null;
   locale: Locale;
   dict: Record<string, string>;
   validTagSlugs: string[];
 }) {
   const [posts, setPosts] = useState<SubstackPost[]>(initialPosts);
+  const [cursor, setCursor] = useState<string | null>(initialCursor);
   const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(initialPosts.length === 20);
-  const [apiOffset, setApiOffset] = useState(initialPosts.length);
 
   const loadMore = async () => {
+    if (!cursor) return;
     setLoading(true);
     try {
-      const nextPosts = await getArchivePosts(apiOffset, 20);
+      const { posts: nextPosts, nextCursor } = await getArchivePosts(
+        20,
+        undefined,
+        cursor,
+      );
       setPosts((prev) => [...prev, ...nextPosts]);
-      setApiOffset((prev) => prev + nextPosts.length);
-
-      // If we received less than 20, there are no more posts
-      if (nextPosts.length < 20) {
-        setHasMore(false);
-      }
+      setCursor(nextCursor);
     } catch (err) {
       console.error("Error loading more posts", err);
     } finally {
@@ -60,7 +61,7 @@ export default function FilteredPostList({
         </div>
       )}
 
-      {hasMore && (
+      {cursor && (
         <div className="mt-12 flex justify-center">
           <button
             type="button"

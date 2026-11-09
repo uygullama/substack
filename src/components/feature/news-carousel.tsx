@@ -19,7 +19,7 @@ export default async function NewsCarousel({ locale }: { locale: Locale }) {
   const validTagSlugs = config.source.substack?.tags?.[locale] || [];
 
   try {
-    const fetchedPosts = await substack.getPosts(0, 20);
+    const { posts: fetchedPosts } = await substack.getPosts(20);
     const posts =
       validTagSlugs && validTagSlugs.length > 0
         ? fetchedPosts.filter((post) =>
